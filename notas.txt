@@ -1,0 +1,47 @@
+# Instalación y uso
+
+Este proyecto está desarrollado con Angular y usa la configuración estándar de Angular CLI. 
+Para ejecutarlo correctamente, debes instalar las dependencias y luego levantar el servidor de desarrollo.
+
+## Requisitos previos
+
+Antes de iniciar, asegúrate de tener instalado:
+
+- Node.js 18 o superior
+- npm (normalmente viene con Node.js)
+
+Puedes verificar la versión con:
+
+```bash
+node -v
+
+
+
+Paso 1: instalar dependencias
+Esto descargará todas las librerías necesarias para que la aplicación funcione.
+Desde la raíz del proyecto, ejecuta:
+
+- npm install
+
+
+
+
+Paso 2: ejecutar la aplicación
+Una vez instaladas las dependencias, inicia el proyecto con:
+
+npm start
+
+o de forma equivalente:
+
+ng serve
+
+
+
+ng serve --host 0.0.0.0 --port 4200
+
+
+
+
+Esto levantará el servidor de desarrollo de Angular.
+
+Paso 3: abrir la app en el navegador
