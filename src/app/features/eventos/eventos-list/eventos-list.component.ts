@@ -62,7 +62,15 @@ export class EventosListComponent implements OnInit {
   eventos: Evento[] = [];
   loading = true;
   error = '';
-  get filteredEvents(): Evento[] { return this.eventos.filter(evento => !this.selectedDate || evento.fecha_evento === this.selectedDate); }
+  get filteredEvents(): Evento[] {
+    return this.eventos
+      .filter(evento => !this.selectedDate || evento.fecha_evento === this.selectedDate)
+      .sort((a, b) => {
+        const aDateTime = `${a.fecha_evento}T${a.hora_inicio ?? '00:00:00'}`;
+        const bDateTime = `${b.fecha_evento}T${b.hora_inicio ?? '00:00:00'}`;
+        return bDateTime.localeCompare(aDateTime) || b.evento_id - a.evento_id;
+      });
+  }
   changeDay(delta: number): void {
     const date = new Date(`${this.selectedDate || this.today}T12:00:00Z`);
     date.setUTCDate(date.getUTCDate() + delta);

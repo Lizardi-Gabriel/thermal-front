@@ -27,6 +27,19 @@ describe('Event workflow', () => {
     ];
     expect(component.filteredEvents.map(event => event.evento_id)).toEqual([1]);
     component.selectedDate = '';
-    expect(component.filteredEvents.length).toBe(2);
+    expect(component.filteredEvents.map(event => event.evento_id)).toEqual([2, 1]);
+  });
+  it('orders events from newest to oldest, including events on the same day', () => {
+    TestBed.configureTestingModule({ providers: [
+      { provide: EventService, useValue: {} },
+      { provide: ActivatedRoute, useValue: { snapshot: { queryParamMap: { get: () => '' } } } },
+    ] });
+    const component = TestBed.runInInjectionContext(() => new EventosListComponent());
+    component.eventos = [
+      { evento_id: 1, fecha_evento: '2026-02-28', hora_inicio: '18:30:00', estatus: 'pendiente' },
+      { evento_id: 3, fecha_evento: '2026-03-01', hora_inicio: '08:00:00', estatus: 'confirmado' },
+      { evento_id: 2, fecha_evento: '2026-03-01', hora_inicio: '12:00:00', estatus: 'descartado' },
+    ];
+    expect(component.filteredEvents.map(event => event.evento_id)).toEqual([2, 3, 1]);
   });
 });

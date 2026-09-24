@@ -47,6 +47,14 @@ ng serve --host 0.0.0.0 --port 4200
 o dejar corriendo con pm2 
 
 
+
+
+pm2 start npx --name "angular-app" -- ng serve --host 0.0.0.0 --port 4200
+
+
+
+
+
 1. instalar npm install -g pm2
 2. dejar corriendo pm2 start npx --name "angular-app" -- ng serve --host 0.0.0.0 --port 4200
 3. verificar pm2 status
