@@ -22,7 +22,7 @@ export function mexicoTime(value?: string | null): string {
     <p *ngIf="failed" role="alert">No se pudo cargar la imagen. <button type="button" (click)="render()">Reintentar</button></p>
     <canvas #canvas [hidden]="loading || failed" role="img" [attr.aria-label]="'Imagen ' + imagen.imagen_id + ', ' + (imagen.detecciones?.length ?? 0) + ' detecciones'"></canvas>
   `,
-  styles: [`:host { display: block; min-width: 0; max-width: 100%; text-align: center; } canvas { display: block; max-width: 100%; max-height: 65vh; width: auto; height: auto; margin: auto; } canvas[hidden] { display: none; }`],
+  styles: [`:host { display: block; min-width: 0; max-width: 100%; text-align: center; } canvas { display: block; max-width: 100%; max-height: var(--detection-height, 65vh); width: var(--detection-width, auto); height: var(--detection-height, auto); object-fit: contain; margin: auto; } canvas[hidden] { display: none; }`],
 })
 export class DetectionImageComponent implements OnChanges, OnDestroy {
   @Input({ required: true }) imagen!: Imagen;

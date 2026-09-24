@@ -21,6 +21,7 @@ import { AuthService } from '@app/core/services/auth.service';
         <nav class="nav">
           <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
           <a routerLink="/eventos" routerLinkActive="active">Eventos</a>
+          <a routerLink="/logs" routerLinkActive="active">Logs</a>
           <a routerLink="/reports" routerLinkActive="active">Reportes</a>
           <a routerLink="/settings" routerLinkActive="active">Configuración</a>
         </nav>

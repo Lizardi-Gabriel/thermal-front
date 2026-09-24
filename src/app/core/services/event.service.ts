@@ -25,14 +25,8 @@ export class EventService {
   updateEventoStatus(
     id: number,
     estatus: 'pendiente' | 'confirmado' | 'descartado',
-    usuario_id: number,
-    descripcion?: string
-  ): Observable<any> {
-    return this.api.put(`/eventos/${id}/status`, {
-      estatus,
-      usuario_id,
-      descripcion,
-    });
+  ): Observable<Evento> {
+    return this.api.put<Evento>(`/eventos/${id}/status?estatus=${encodeURIComponent(estatus)}`, {});
   }
 
   updateEventoDescripcion(id: number, descripcion: string): Observable<any> {

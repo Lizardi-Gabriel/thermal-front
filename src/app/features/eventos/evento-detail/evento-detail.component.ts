@@ -4,54 +4,48 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { EventService } from '@app/core/services/event.service';
 import { Evento } from '@app/core/models/evento.model';
 import { EventCarouselComponent } from '../components/event-carousel.component';
+import { AirSummaryComponent } from '../components/air-summary.component';
 import { mexicoTime } from '../components/detection-image.component';
 
 @Component({
   selector: 'app-evento-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink, EventCarouselComponent],
+  imports: [CommonModule, RouterLink, EventCarouselComponent, AirSummaryComponent],
   template: `
     <section class="page-shell" *ngIf="evento; else loadingTpl">
       <div class="header-row">
         <div>
-          <a routerLink="/eventos" class="back-link">← Volver</a>
+          <a routerLink="/eventos" [queryParams]="{ fecha: returnDate }" class="back-link">← Volver</a>
           <h1>Evento #{{ evento.evento_id }}</h1>
         </div>
         <span class="badge" [ngClass]="evento.estatus">{{ evento.estatus }}</span>
       </div>
 
-      <div class="meta-grid">
-        <div class="card">
-          <h3>Información</h3>
-          <p><strong>Fecha:</strong> {{ evento.fecha_evento }}</p>
-          <p><strong>Usuario:</strong> {{ evento.usuario?.nombre_usuario ?? 'Sin asignar' }}</p>
-          <p><strong>Descripción:</strong> {{ evento.descripcion || 'Sin descripción' }}</p>
+      <div class="card summary">
+        <p><strong>Fecha:</strong> {{ evento.fecha_evento | date:'dd/MM/yyyy' }}</p>
+        <p><strong>Horario:</strong> {{ time(evento.imagenes?.[0]?.hora_subida) }} — {{ time(evento.imagenes?.[lastImageIndex]?.hora_subida) }} <small>Ciudad de México</small></p>
+        <div class="counts">
+          <div><strong>{{ totalDetections }}</strong><span>Detecciones acumuladas</span></div>
+          <div><strong>{{ maxDetections }}</strong><span>Máximo por imagen</span></div>
+          <div><strong>{{ evento.total_imagenes ?? evento.imagenes?.length ?? 0 }}</strong><span>Imágenes</span></div>
         </div>
-        <div class="card">
-          <h3>Resumen del evento</h3>
-          <p><strong>Imágenes:</strong> {{ evento.total_imagenes ?? evento.imagenes?.length ?? 0 }}</p>
-          <p><strong>Máximo de fumadores detectados:</strong> {{ maxDetections }}</p>
-          <p><strong>Detecciones acumuladas:</strong> {{ totalDetections }}</p>
-          <p><strong>Inicio:</strong> {{ time(evento.imagenes?.[0]?.hora_subida) }}</p>
-          <p><strong>Fin:</strong> {{ time(evento.imagenes?.[lastImageIndex]?.hora_subida) }}</p>
-          <small>Horarios de Ciudad de México. Las detecciones acumuladas pueden incluir la misma persona en varias fotos.</small>
-          <h3>Acciones</h3>
-          <p *ngIf="statusError" role="alert">{{ statusError }}</p>
-          <div class="actions">
-            <button [disabled]="saving" (click)="setStatus('pendiente')">Pendiente</button>
-            <button [disabled]="saving" (click)="setStatus('confirmado')">Confirmado</button>
-            <button [disabled]="saving" (click)="setStatus('descartado')">Descartado</button>
-          </div>
-        </div>
+        <p *ngIf="evento.estatus !== 'pendiente'"><strong>Gestionado por:</strong> {{ evento.usuario?.nombre_usuario || 'Sin información de usuario' }}</p>
+        <p *ngIf="evento.estatus === 'pendiente'" class="muted">Pendiente de revisión. Revisa las imágenes antes de confirmar o descartar el evento.</p>
       </div>
+      <p class="feedback" *ngIf="statusMessage" role="status">{{ statusMessage }}</p>
 
       <div class="card">
         <app-event-carousel [images]="evento.imagenes ?? []" />
       </div>
 
-      <div class="card" *ngIf="evento.registros_calidad_aire?.length">
+      <div class="card"><h3>Descripción</h3><p class="description">{{ evento.descripcion || 'Sin descripción disponible.' }}</p></div>
+      <div class="card">
         <h3>Calidad del aire</h3>
-        <div class="table-wrap">
+        <p class="muted">Promedios del evento</p>
+        <app-air-summary [evento]="evento" />
+        <h4>Mediciones detalladas</h4>
+        <p *ngIf="!evento.registros_calidad_aire?.length" class="muted">No hay mediciones disponibles para este evento.</p>
+        <div class="table-wrap" *ngIf="evento.registros_calidad_aire?.length">
           <table>
             <thead>
               <tr>
@@ -78,11 +72,20 @@ import { mexicoTime } from '../components/detection-image.component';
           </table>
         </div>
       </div>
+      <div class="review-panel card" *ngIf="evento.estatus === 'pendiente'">
+        <div><h3>Revisar evento</h3><p class="muted">Confirma si las imágenes corresponden a un evento de consumo de tabaco.</p></div>
+        <div class="actions">
+          <button class="discard" [disabled]="saving" (click)="setStatus('descartado')">Descartar evento</button>
+          <button class="confirm" [disabled]="saving" (click)="setStatus('confirmado')">Confirmar evento</button>
+        </div>
+        <p *ngIf="saving" role="status">Guardando revisión…</p>
+        <p *ngIf="statusError" role="alert">{{ statusError }}</p>
+      </div>
     </section>
 
     <ng-template #loadingTpl>
       <section class="page-shell">
-        <a routerLink="/eventos" class="back-link">← Volver</a>
+        <a routerLink="/eventos" [queryParams]="{ fecha: returnDate }" class="back-link">← Volver</a>
         <p role="status">{{ loadError || 'Cargando detalle del evento...' }}</p>
         <button *ngIf="loadError" (click)="ngOnInit()">Reintentar</button>
       </section>
@@ -168,18 +171,21 @@ import { mexicoTime } from '../components/detection-image.component';
         cursor: pointer;
       }
 
-      .images-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 1rem;
-      }
-
-      img {
-        width: 100%;
-        border-radius: 12px;
-        border: 1px solid #24314a;
-        object-fit: cover;
-      }
+      h3 { margin-top: 0; }
+      .page-shell { max-width: 1200px; margin: 0 auto; }
+      .muted, small, .counts span { color: var(--muted); }
+      .description { white-space: pre-line; line-height: 1.6; }
+      .counts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .8rem; margin: 1.2rem 0; }
+      .counts div { display: grid; gap: .5rem; padding: .8rem; background: #0d172b; border-radius: 12px; }
+      .counts strong { color: var(--primary); font-size: 1.5rem; }
+      .counts span { font-size: .8rem; }
+      .confirm { background: #145044; color: #a7f3d0; }
+      .discard { background: #572733; color: #fecdd3; }
+      .actions button { flex: 1; padding: 1rem; font-weight: 700; }
+      button:disabled { opacity: .6; cursor: wait; }
+      button:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
+      .feedback { padding: 1rem; border: 1px solid #276454; background: #123c32; color: #a7f3d0; border-radius: 12px; }
+      @media(max-width: 480px) { .counts { grid-template-columns: 1fr; } .header-row { flex-wrap: wrap; } }
 
       .table-wrap { overflow-x: auto; }
 
@@ -204,6 +210,8 @@ export class EventoDetailComponent implements OnInit {
   evento?: Evento;
   loadError = '';
   statusError = '';
+  statusMessage = '';
+  returnDate = this.route.snapshot.queryParamMap.get('fecha');
   saving = false;
   time = mexicoTime;
   get lastImageIndex(): number { return Math.max(0, (this.evento?.imagenes?.length ?? 0) - 1); }
@@ -223,15 +231,14 @@ export class EventoDetailComponent implements OnInit {
 
   setStatus(status: 'pendiente' | 'confirmado' | 'descartado'): void {
     if (!this.evento || this.saving) return;
-    const usuarioId = Number(localStorage.getItem('current_user') ? JSON.parse(localStorage.getItem('current_user') ?? '{}')?.usuario_id : 0);
-
     this.saving = true;
     this.statusError = '';
-    this.eventService.updateEventoStatus(this.evento.evento_id, status, usuarioId, this.evento.descripcion ?? '').subscribe({
-      next: () => {
+    this.eventService.updateEventoStatus(this.evento.evento_id, status).subscribe({
+      next: (updated) => {
         this.saving = false;
         if (this.evento) {
-          this.evento.estatus = status;
+          this.evento = { ...this.evento, estatus: updated.estatus, usuario: updated.usuario, usuario_id: updated.usuario_id };
+          this.statusMessage = status === 'confirmado' ? 'Evento confirmado correctamente.' : 'Evento descartado correctamente.';
         }
       },
       error: () => { this.saving = false; this.statusError = 'No se pudo actualizar el estado.'; },
