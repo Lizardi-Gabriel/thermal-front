@@ -13,7 +13,7 @@ export class AuthService {
   private currentUserSubject = new BehaviorSubject<User | null>(this.getStoredUser());
   currentUser$ = this.currentUserSubject.asObservable();
 
-  login(payload: LoginRequest) {
+  login(payload: LoginRequest): Observable<TokenResponse> {
     const body = new URLSearchParams({
       username: payload.username,
       password: payload.password,
@@ -57,5 +57,13 @@ export class AuthService {
   getStoredUser(): User | null {
     const raw = localStorage.getItem(this.userKey);
     return raw ? (JSON.parse(raw) as User) : null;
+  }
+
+  getCurrentUser(): Observable<User> {
+    return this.http.get<User>(`${environment.apiUrl}/usuarios/me`).pipe(
+      tap((user) => {
+        this.setCurrentUser(user);
+      })
+    );
   }
 }

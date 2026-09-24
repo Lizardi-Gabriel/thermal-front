@@ -11,9 +11,11 @@ export const routes: Routes = [
   {
     path: '',
     canActivate: [authGuard],
+    loadComponent: () => import('./core/layout/main-layout/main-layout.component').then((m) => m.MainLayoutComponent),
     children: [
       { path: 'dashboard', loadComponent: () => import('./features/dashboard/dashboard.component').then((m) => m.DashboardComponent) },
-      { path: 'eventos', loadComponent: () => import('./features/eventos/eventos.component').then((m) => m.EventosComponent) },
+      { path: 'eventos', loadComponent: () => import('./features/eventos/eventos-list/eventos-list.component').then((m) => m.EventosListComponent) },
+      { path: 'eventos/:id', loadComponent: () => import('./features/eventos/evento-detail/evento-detail.component').then((m) => m.EventoDetailComponent) },
       { path: 'reports', loadComponent: () => import('./features/reports/reports.component').then((m) => m.ReportsComponent) },
       { path: 'settings', loadComponent: () => import('./features/settings/settings.component').then((m) => m.SettingsComponent) },
     ],

@@ -42,6 +42,20 @@ ng serve --host 0.0.0.0 --port 4200
 
 
 
+
+
+o dejar corriendo con pm2 
+
+
+1. instalar npm install -g pm2
+2. dejar corriendo pm2 start npx --name "angular-app" -- ng serve --host 0.0.0.0 --port 4200
+3. verificar pm2 status
+4. ver logs pm2 logs angular-app
+5. detener pm2 stop angular-app
+
+
+
+
 Esto levantará el servidor de desarrollo de Angular.
 
 Paso 3: abrir la app en el navegador

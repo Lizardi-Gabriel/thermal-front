@@ -7,6 +7,18 @@ export interface Evento {
   estatus: EventoStatus;
   usuario_id?: number | null;
   usuario?: UserLight | null;
+  total_imagenes?: number;
+  max_detecciones?: number;
+  total_detecciones?: number;
+  hora_inicio?: string | null;
+  hora_fin?: string | null;
+  promedio_pm10?: number | null;
+  promedio_pm2p5?: number | null;
+  promedio_pm1p0?: number | null;
+  color_pm10?: string | null;
+  color_pm2p5?: string | null;
+  color_pm1p0?: string | null;
+  imagen_preview?: ImagenPreview | null;
   imagenes?: Imagen[];
   registros_calidad_aire?: CalidadAire[];
 }
@@ -14,6 +26,14 @@ export interface Evento {
 export interface UserLight {
   usuario_id: number;
   nombre_usuario: string;
+}
+
+export interface ImagenPreview {
+  ruta_imagen: string;
+  imagen_id: number;
+  evento_id: number;
+  hora_subida: string;
+  detecciones?: Deteccion[];
 }
 
 export interface Imagen {
