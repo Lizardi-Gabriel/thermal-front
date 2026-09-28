@@ -47,7 +47,7 @@ import { ReportService } from '@app/core/services/report.service';
 
       .eyebrow {
         margin: 0;
-        color: #93c5fd;
+        color: var(--primary);
         letter-spacing: 0.12em;
         text-transform: uppercase;
       }
@@ -58,8 +58,8 @@ import { ReportService } from '@app/core/services/report.service';
 
       .date-filters { display: flex; flex-wrap: wrap; align-items: end; gap: 1rem; }
       .date-filters label { display: grid; gap: .5rem; flex: 1 1 180px; min-width: 0; }
-      .date-filters input { width: 100%; min-width: 0; padding: .8rem; border: 1px solid #24314a; border-radius: 10px; background: #111b2d; color: #e5edf8; font: inherit; }
-      .period { margin: 0; color: #a7b4c8; }
+      .date-filters input { width: 100%; min-width: 0; padding: .8rem; border: 1px solid var(--panel-border); border-radius: 10px; background: var(--bg-elevated); color: var(--text); font: inherit; }
+      .period { margin: 0; color: var(--muted); }
 
       .actions {
         display: flex;
@@ -70,8 +70,8 @@ import { ReportService } from '@app/core/services/report.service';
       button {
         border: none;
         border-radius: 10px;
-        background: linear-gradient(135deg, #60a5fa, #3b82f6);
-        color: white;
+        background: var(--primary);
+        color: var(--on-primary);
         padding: 0.9rem 1.1rem;
         font-weight: 700;
         cursor: pointer;
@@ -80,16 +80,16 @@ import { ReportService } from '@app/core/services/report.service';
       button:disabled { opacity: .6; cursor: not-allowed; }
 
       .secondary {
-        background: #111b2d;
-        border: 1px solid #24314a;
+        background: var(--bg-elevated);
+        border: 1px solid var(--panel-border);
       }
 
       .hint {
-        background: rgba(59, 130, 246, 0.08);
-        border: 1px solid rgba(96, 165, 250, 0.2);
+        background: var(--primary-soft);
+        border: 1px solid var(--primary-border);
         border-radius: 10px;
         padding: 0.9rem 1rem;
-        color: #dfeafc;
+        color: var(--text);
       }
     `,
   ],

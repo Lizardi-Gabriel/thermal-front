@@ -38,8 +38,8 @@ import { ApiService } from '@app/core/services/api.service';
       .page-shell {
         padding: 2rem;
         min-height: 100vh;
-        background: #0b1220;
-        color: #e5edf8;
+        background: var(--bg);
+        color: var(--text);
       }
 
       .topbar {
@@ -50,7 +50,7 @@ import { ApiService } from '@app/core/services/api.service';
         margin: 0;
         font-size: clamp(2rem, 3vw, 2.5rem);
         font-weight: 700;
-        color: #f8fbff;
+        color: var(--text);
       }
 
       .stats-grid {
@@ -60,18 +60,18 @@ import { ApiService } from '@app/core/services/api.service';
       }
 
       .card {
-        background: linear-gradient(180deg, #121d31 0%, #101a2a 100%);
-        border: 1px solid #24314a;
+        background: linear-gradient(180deg, var(--bg-elevated) 0%, var(--bg-elevated) 100%);
+        border: 1px solid var(--panel-border);
         border-radius: 18px;
         padding: 1.25rem;
-        box-shadow: 0 12px 28px rgba(15, 23, 42, 0.45);
+        box-shadow: 0 12px 28px var(--shadow);
         display: grid;
         gap: 0.7rem;
         min-height: 130px;
       }
 
       .card span {
-        color: #9aa9c2;
+        color: var(--muted);
         font-size: 0.9rem;
         letter-spacing: 0.04em;
         text-transform: uppercase;
@@ -80,7 +80,7 @@ import { ApiService } from '@app/core/services/api.service';
       .card strong {
         font-size: clamp(1.8rem, 3vw, 2.3rem);
         font-weight: 700;
-        color: #f8fbff;
+        color: var(--text);
       }
     `,
   ],

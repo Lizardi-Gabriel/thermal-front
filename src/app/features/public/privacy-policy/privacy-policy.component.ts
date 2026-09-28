@@ -24,27 +24,27 @@ import { Component } from '@angular/core';
         display: grid;
         place-items: center;
         min-height: 100vh;
-        background: #0b1220;
-        color: #e5edf8;
+        background: var(--bg);
+        color: var(--text);
         padding: 2rem;
       }
 
       .policy-card {
         max-width: 800px;
-        background: #111b2d;
-        border: 1px solid #24314a;
+        background: var(--bg-elevated);
+        border: 1px solid var(--panel-border);
         border-radius: 16px;
         padding: 2rem;
-        box-shadow: 0 18px 40px rgba(15, 23, 42, 0.5);
+        box-shadow: 0 18px 40px var(--shadow);
       }
 
       h1 {
         margin-top: 0;
-        color: #f8fbff;
+        color: var(--text);
       }
 
       p, li {
-        color: #dfeafc;
+        color: var(--text);
       }
 
       ul {

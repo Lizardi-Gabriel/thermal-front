@@ -31,22 +31,22 @@ import { environment } from '@environments/environment';
         display: grid;
         place-items: center;
         min-height: 100vh;
-        background: #0b1220;
+        background: var(--bg);
       }
 
       .auth-card {
         width: min(420px, 90vw);
-        background: #111b2d;
-        border: 1px solid #24314a;
+        background: var(--bg-elevated);
+        border: 1px solid var(--panel-border);
         border-radius: 16px;
         padding: 2rem;
-        box-shadow: 0 18px 40px rgba(15, 23, 42, 0.5);
+        box-shadow: 0 18px 40px var(--shadow);
       }
 
       h1 {
         margin-bottom: 1.5rem;
         font-size: 2rem;
-        color: #e5edf8;
+        color: var(--text);
       }
 
       form {
@@ -58,23 +58,23 @@ import { environment } from '@environments/environment';
         display: grid;
         gap: 0.4rem;
         font-weight: 600;
-        color: #dfeafc;
+        color: var(--text);
       }
 
       input {
-        border: 1px solid #24314a;
+        border: 1px solid var(--panel-border);
         border-radius: 10px;
         padding: 0.8rem 0.9rem;
         font-size: 1rem;
-        background: #0f172a;
-        color: #e5edf8;
+        background: var(--input-bg);
+        color: var(--text);
       }
 
       button {
         border: none;
         border-radius: 10px;
-        background: linear-gradient(135deg, #60a5fa, #3b82f6);
-        color: white;
+        background: var(--primary);
+        color: var(--on-primary);
         padding: 0.9rem 1rem;
         font-weight: 700;
         cursor: pointer;
@@ -86,7 +86,7 @@ import { environment } from '@environments/environment';
       }
 
       a {
-        color: #93c5fd;
+        color: var(--primary);
         text-decoration: none;
       }
     `,

@@ -49,7 +49,7 @@ export class DetectionImageComponent implements OnChanges, OnDestroy {
       if (!ctx) { this.loading = false; this.failed = true; return; }
       ctx.drawImage(img, 0, 0);
       if (this.showDetections) {
-        ctx.strokeStyle = '#01ff01';
+        ctx.strokeStyle = getComputedStyle(canvas).getPropertyValue('--warning').trim();
         ctx.lineWidth = Math.max(2, img.naturalWidth / 400);
         for (const det of this.imagen.detecciones ?? []) {
           if (![det.x1, det.x2, det.y1, det.y2].every(Number.isFinite)) continue;

@@ -115,7 +115,7 @@ import { mexicoTime } from '../components/detection-image.component';
       }
 
       .back-link {
-        color: #93c5fd;
+        color: var(--primary);
         text-decoration: none;
       }
 
@@ -127,18 +127,18 @@ import { mexicoTime } from '../components/detection-image.component';
       }
 
       .badge.pendiente {
-        background: rgba(250, 204, 21, 0.12);
-        color: #facc15;
+        background: var(--warning-soft);
+        color: var(--warning);
       }
 
       .badge.confirmado {
-        background: rgba(34, 197, 94, 0.12);
-        color: #4ade80;
+        background: var(--primary-soft);
+        color: var(--primary);
       }
 
       .badge.descartado {
-        background: rgba(248, 113, 113, 0.12);
-        color: #f87171;
+        background: var(--danger-soft);
+        color: var(--danger);
       }
 
       .meta-grid {
@@ -150,8 +150,8 @@ import { mexicoTime } from '../components/detection-image.component';
       .card {
         min-width: 0;
         overflow-wrap: anywhere;
-        background: #121d31;
-        border: 1px solid #24314a;
+        background: var(--bg-elevated);
+        border: 1px solid var(--panel-border);
         border-radius: 16px;
         padding: 1.25rem;
       }
@@ -165,8 +165,8 @@ import { mexicoTime } from '../components/detection-image.component';
       button {
         border: none;
         border-radius: 10px;
-        background: #1d4ed8;
-        color: white;
+        background: var(--primary);
+        color: var(--on-primary);
         padding: 0.7rem 0.9rem;
         cursor: pointer;
       }
@@ -176,15 +176,15 @@ import { mexicoTime } from '../components/detection-image.component';
       .muted, small, .counts span { color: var(--muted); }
       .description { white-space: pre-line; line-height: 1.6; }
       .counts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .8rem; margin: 1.2rem 0; }
-      .counts div { display: grid; gap: .5rem; padding: .8rem; background: #0d172b; border-radius: 12px; }
+      .counts div { display: grid; gap: .5rem; padding: .8rem; background: var(--bg); border-radius: 12px; }
       .counts strong { color: var(--primary); font-size: 1.5rem; }
       .counts span { font-size: .8rem; }
-      .confirm { background: #145044; color: #a7f3d0; }
-      .discard { background: #572733; color: #fecdd3; }
+      .confirm { background: var(--primary-soft); color: var(--primary); }
+      .discard { background: var(--danger-soft); color: var(--danger); }
       .actions button { flex: 1; padding: 1rem; font-weight: 700; }
       button:disabled { opacity: .6; cursor: wait; }
       button:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
-      .feedback { padding: 1rem; border: 1px solid #276454; background: #123c32; color: #a7f3d0; border-radius: 12px; }
+      .feedback { padding: 1rem; border: 1px solid var(--primary-border); background: var(--primary-soft); color: var(--primary); border-radius: 12px; }
       @media(max-width: 480px) { .counts { grid-template-columns: 1fr; } .header-row { flex-wrap: wrap; } }
 
       .table-wrap { overflow-x: auto; }
@@ -192,13 +192,13 @@ import { mexicoTime } from '../components/detection-image.component';
       table {
         width: 100%;
         border-collapse: collapse;
-        color: #e5edf8;
+        color: var(--text);
       }
 
       th, td {
         text-align: left;
         padding: 0.7rem;
-        border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+        border-bottom: 1px solid var(--panel-border);
       }
     `,
   ],

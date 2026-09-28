@@ -57,13 +57,13 @@ import { AuthService } from '@app/core/services/auth.service';
         display: grid;
         grid-template-columns: 240px minmax(0, 1fr);
         min-height: 100vh;
-        background: #0b1220;
-        color: #e5edf8;
+        background: var(--bg);
+        color: var(--text);
       }
 
       .sidebar {
-        background: linear-gradient(180deg, #0f172a 0%, #111b2d 100%);
-        border-right: 1px solid #24314a;
+        background: linear-gradient(180deg, var(--input-bg) 0%, var(--bg-elevated) 100%);
+        border-right: 1px solid var(--panel-border);
         padding: 1.5rem 1rem;
       }
 
@@ -72,7 +72,7 @@ import { AuthService } from '@app/core/services/auth.service';
         align-items: center;
         gap: 0.75rem;
         padding: 0.5rem 0.75rem 1.5rem;
-        border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+        border-bottom: 1px solid var(--panel-border);
         margin-bottom: 1rem;
       }
 
@@ -82,7 +82,8 @@ import { AuthService } from '@app/core/services/auth.service';
         width: 36px;
         height: 36px;
         border-radius: 10px;
-        background: linear-gradient(135deg, #60a5fa, #3b82f6);
+        background: var(--primary);
+        color: var(--on-primary);
         font-weight: 700;
       }
 
@@ -92,7 +93,7 @@ import { AuthService } from '@app/core/services/auth.service';
       }
 
       .brand small {
-        color: #93c5fd;
+        color: var(--primary);
       }
 
       .nav {
@@ -101,7 +102,7 @@ import { AuthService } from '@app/core/services/auth.service';
       }
 
       .nav a {
-        color: #dfeafc;
+        color: var(--text);
         text-decoration: none;
         padding: 0.8rem 0.9rem;
         border-radius: 10px;
@@ -110,8 +111,8 @@ import { AuthService } from '@app/core/services/auth.service';
 
       .nav a.active,
       .nav a:hover {
-        background: rgba(96, 165, 250, 0.14);
-        color: #ffffff;
+        background: var(--primary-soft);
+        color: var(--text);
       }
 
       .content-shell {
@@ -125,12 +126,12 @@ import { AuthService } from '@app/core/services/auth.service';
         align-items: center;
         justify-content: space-between;
         padding: 1.25rem 2rem;
-        border-bottom: 1px solid #24314a;
-        background: rgba(15, 23, 42, 0.8);
+        border-bottom: 1px solid var(--panel-border);
+        background: var(--header-bg);
       }
 
       .eyebrow {
-        color: #93c5fd;
+        color: var(--primary);
         letter-spacing: 0.12em;
         font-size: 0.72rem;
         text-transform: uppercase;
@@ -148,13 +149,13 @@ import { AuthService } from '@app/core/services/auth.service';
       }
 
       .user-box span {
-        color: #dfeafc;
+        color: var(--text);
       }
 
       .user-box button {
-        border: 1px solid #24314a;
+        border: 1px solid var(--panel-border);
         background: transparent;
-        color: #dfeafc;
+        color: var(--text);
         border-radius: 10px;
         padding: 0.7rem 0.9rem;
         cursor: pointer;
@@ -179,7 +180,7 @@ import { AuthService } from '@app/core/services/auth.service';
 
         .sidebar {
           border-right: none;
-          border-bottom: 1px solid #24314a;
+          border-bottom: 1px solid var(--panel-border);
         }
       }
     `,

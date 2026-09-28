@@ -89,46 +89,46 @@ import { DetectionImageComponent, imageUrl, mexicoTime } from './detection-image
   styles: [`
     :host { display:block; min-width:0; max-width:100%; }
     .event-viewer { min-width:0; outline:none; }
-    .event-viewer:focus-visible { outline:2px solid #60a5fa; outline-offset:6px; border-radius:10px; }
+    .event-viewer:focus-visible { outline:2px solid var(--primary); outline-offset:6px; border-radius:10px; }
     .toolbar, .toolbar-actions, .navigation, .timeline-actions, .dialog-toolbar { display:flex; align-items:center; gap:.75rem; }
     .toolbar { justify-content:space-between; flex-wrap:wrap; margin-bottom:1rem; }
     h3 { margin:0 0 .25rem; }
     .hint { color:var(--muted); margin:0; font-size:.9rem; }
     .toolbar-actions, .timeline-actions { flex-wrap:wrap; }
-    .toggle { display:flex; align-items:center; gap:.5rem; color:#cbd5e1; cursor:pointer; }
-    .toggle input { accent-color:#3b82f6; width:1rem; height:1rem; }
-    button { background:#2563eb; color:white; border:1px solid transparent; border-radius:10px; padding:.65rem .85rem; cursor:pointer; font-weight:650; }
-    button.secondary { background:#18253a; border-color:#334155; color:#dbeafe; }
+    .toggle { display:flex; align-items:center; gap:.5rem; color:var(--muted); cursor:pointer; }
+    .toggle input { accent-color:var(--primary); width:1rem; height:1rem; }
+    button { background:var(--primary); color: var(--on-primary); border:1px solid transparent; border-radius:10px; padding:.65rem .85rem; cursor:pointer; font-weight:650; }
+    button.secondary { background:var(--panel); border-color:var(--panel-border); color:var(--text); }
     button:disabled { opacity:.4; cursor:default; }
-    button:focus-visible, input:focus-visible { outline:2px solid #93c5fd; outline-offset:3px; }
-    .stage { display:flex; align-items:center; justify-content:center; min-height:240px; max-height:56vh; overflow:hidden; padding:.5rem; background:#09111f; border:1px solid #22304a; border-radius:14px; }
+    button:focus-visible, input:focus-visible { outline:2px solid var(--primary); outline-offset:3px; }
+    .stage { display:flex; align-items:center; justify-content:center; min-height:240px; max-height:56vh; overflow:hidden; padding:.5rem; background:var(--bg); border:1px solid var(--panel-border); border-radius:14px; }
     .stage app-detection-image { --detection-height:min(54vh, 620px); --detection-width:100%; width:100%; }
     .navigation { justify-content:space-between; margin:1rem 0; }
     .nav-button { min-width:112px; }
     .current-meta { display:grid; text-align:center; gap:.2rem; }
     .current-meta span, .range-labels, .details { color:var(--muted); font-size:.86rem; }
-    .timeline { padding:1rem; background:#0d172b; border:1px solid #22304a; border-radius:14px; }
+    .timeline { padding:1rem; background:var(--bg); border:1px solid var(--panel-border); border-radius:14px; }
     .filmstrip { display:flex; gap:.5rem; overflow-x:auto; padding:.2rem; scroll-snap-type:x proximity; scrollbar-width:thin; }
-    .thumb, .gallery-item { position:relative; min-width:0; padding:.35rem; background:#111d31; color:#cbd5e1; border-color:transparent; }
+    .thumb, .gallery-item { position:relative; min-width:0; padding:.35rem; background:var(--bg-elevated); color:var(--muted); border-color:transparent; }
     .thumb { flex:1 0 74px; scroll-snap-align:center; }
     .thumb img, .gallery-item img { display:block; width:100%; height:52px; object-fit:cover; border-radius:5px; }
     .thumb span, .gallery-item span { display:block; padding-top:.25rem; font-size:.75rem; }
-    .thumb i { position:absolute; top:.15rem; right:.15rem; min-width:1.25rem; padding:.1rem .3rem; background:#16a34a; color:white; border-radius:999px; font-size:.68rem; font-style:normal; }
-    .thumb.active, .gallery-item.active { border-color:#60a5fa; box-shadow:0 0 0 1px #60a5fa; background:#172744; }
-    .scrubber { width:100%; margin:1rem 0 .15rem; accent-color:#3b82f6; cursor:pointer; }
+    .thumb i { position:absolute; top:.15rem; right:.15rem; min-width:1.25rem; padding:.1rem .3rem; background:var(--primary); color: var(--on-primary); border-radius:999px; font-size:.68rem; font-style:normal; }
+    .thumb.active, .gallery-item.active { border-color:var(--primary); box-shadow:0 0 0 1px var(--primary); background:var(--primary-soft); }
+    .scrubber { width:100%; margin:1rem 0 .15rem; accent-color:var(--primary); cursor:pointer; }
     .range-labels { display:flex; justify-content:space-between; margin-bottom:1rem; }
     .timeline-actions { justify-content:center; }
-    .count { display:inline-grid; place-items:center; min-width:1.5rem; height:1.5rem; padding:0 .35rem; background:#23324a; border-radius:999px; font-size:.75rem; }
+    .count { display:inline-grid; place-items:center; min-width:1.5rem; height:1.5rem; padding:0 .35rem; background:var(--panel); border-radius:999px; font-size:.75rem; }
     .details { margin-top:1rem; }
     .details p { margin:.5rem 0; }
     .details ul { margin:.5rem 0 0; padding-left:1.25rem; }
-    .gallery { display:grid; grid-template-columns:repeat(auto-fill, minmax(74px, 1fr)); gap:.5rem; max-height:420px; overflow:auto; margin-top:1rem; padding:.75rem; border:1px solid #22304a; border-radius:12px; }
+    .gallery { display:grid; grid-template-columns:repeat(auto-fill, minmax(74px, 1fr)); gap:.5rem; max-height:420px; overflow:auto; margin-top:1rem; padding:.75rem; border:1px solid var(--panel-border); border-radius:12px; }
     .gallery-item img { height:48px; }
-    .empty-filter { text-align:center; padding:2rem; background:#0d172b; border-radius:12px; }
-    dialog { background:#121d31; color:#e5edf8; border:1px solid #334155; border-radius:16px; width:min(1100px, 92vw); max-height:92vh; overflow:auto; }
-    dialog::backdrop { background:rgba(0,0,0,.9); }
+    .empty-filter { text-align:center; padding:2rem; background:var(--bg); border-radius:12px; }
+    dialog { background:var(--bg-elevated); color:var(--text); border:1px solid var(--panel-border); border-radius:16px; width:min(1100px, 92vw); max-height:92vh; overflow:auto; }
+    dialog::backdrop { background:var(--backdrop); }
     .dialog-toolbar { justify-content:space-between; margin-bottom:1rem; }
-    .dialog-navigation { position:sticky; bottom:0; background:#121d31; padding:.75rem 0 0; }
+    .dialog-navigation { position:sticky; bottom:0; background:var(--bg-elevated); padding:.75rem 0 0; }
     @media(max-width:600px) {
       .nav-button { min-width:auto; } .nav-button span { display:none; }
       .toolbar-actions, .timeline-actions { width:100%; } .timeline-actions > * { flex:1; justify-content:center; }

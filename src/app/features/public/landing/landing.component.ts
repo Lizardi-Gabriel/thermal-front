@@ -25,8 +25,8 @@ import { RouterLink } from '@angular/router';
         min-height: 100vh;
         display: grid;
         place-items: center;
-        background: radial-gradient(circle at top, rgba(96, 165, 250, 0.18), transparent 35%), #0b1220;
-        color: #e5edf8;
+        background: radial-gradient(circle at top, var(--glow), transparent 35%), var(--bg);
+        color: var(--text);
       }
 
       .hero-inner {
@@ -39,18 +39,18 @@ import { RouterLink } from '@angular/router';
         letter-spacing: .12em;
         text-transform: uppercase;
         font-weight: 700;
-        color: #93c5fd;
+        color: var(--primary);
       }
 
       h1 {
         font-size: clamp(2.5rem, 5vw, 4rem);
         margin: 0.5rem 0 1rem;
-        color: #f8fbff;
+        color: var(--text);
       }
 
       .subtitle {
         font-size: 1.15rem;
-        color: #c9d7ee;
+        color: var(--muted);
       }
 
       .actions {
@@ -65,15 +65,15 @@ import { RouterLink } from '@angular/router';
         padding: 0.9rem 1.25rem;
         text-decoration: none;
         border-radius: 10px;
-        background: linear-gradient(135deg, #60a5fa, #3b82f6);
-        color: white;
+        background: var(--primary);
+        color: var(--on-primary);
         font-weight: 700;
       }
 
       .secondary {
-        background: #111b2d;
-        color: #e5edf8;
-        border: 1px solid #24314a;
+        background: var(--bg-elevated);
+        color: var(--text);
+        border: 1px solid var(--panel-border);
       }
     `,
   ],

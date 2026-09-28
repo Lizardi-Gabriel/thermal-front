@@ -1,0 +1,38 @@
+/* Paleta única: 3 colores principales + 2 excepcionales.
+ * Regla 60/30/10 como guía de jerarquía visual:
+ * 60% base oscura (fondos), 30% neutro claro (texto y superficies),
+ * 10% acento azul (acciones, selección y confirmaciones).
+ * Amarillo: pendientes, advertencias y detecciones.
+ * Rojo: errores, descartes y acciones destructivas.
+ * Las mezclas y transparencias derivan de estas cinco bases;
+ * no agregar colores literales en los componentes.
+ */
+:root {
+  color-scheme: dark;
+  --color-base: #0b1220;
+  --color-neutral: #e5edf8;
+  --color-accent: #60a5fa;
+  --color-warning: #facc15;
+  --color-danger: #f87171;
+
+  --bg: var(--color-base);
+  --text: var(--color-neutral);
+  --primary: var(--color-accent);
+  --warning: var(--color-warning);
+  --danger: var(--color-danger);
+  --on-primary: var(--color-base);
+  --bg-elevated: color-mix(in srgb, var(--bg), var(--text) 4%);
+  --panel: color-mix(in srgb, var(--bg), var(--text) 7%);
+  --panel-border: color-mix(in srgb, var(--bg), var(--text) 18%);
+  --muted: color-mix(in srgb, var(--text), var(--bg) 30%);
+  --input-bg: var(--bg);
+  --primary-strong: var(--primary);
+  --primary-soft: color-mix(in srgb, var(--primary) 14%, var(--bg));
+  --primary-border: color-mix(in srgb, var(--primary) 35%, var(--bg));
+  --warning-soft: color-mix(in srgb, var(--warning) 14%, var(--bg));
+  --danger-soft: color-mix(in srgb, var(--danger) 14%, var(--bg));
+  --shadow: color-mix(in srgb, var(--bg) 50%, transparent);
+  --backdrop: color-mix(in srgb, var(--bg) 90%, transparent);
+  --header-bg: color-mix(in srgb, var(--bg) 80%, transparent);
+  --glow: color-mix(in srgb, var(--primary) 18%, transparent);
+}
