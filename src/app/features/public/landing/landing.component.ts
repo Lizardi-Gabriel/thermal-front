@@ -11,7 +11,7 @@ import { RouterLink } from '@angular/router';
       <div class="hero-inner">
         <p class="eyebrow">Thermal Monitoring</p>
         <h1>Monitoreo inteligente de eventos térmicos</h1>
-        <p class="subtitle">Plataforma web para gestión de eventos, imagenes y reportes sin depender de Firebase ni vistas renderizadas desde el backend.</p>
+        <p class="subtitle">Plataforma web para gestión de eventos, imagenes y reportes</p>
         <div class="actions">
           <a routerLink="/login">Acceder</a>
           <a routerLink="/privacy-policy" class="secondary">Política de privacidad</a>
