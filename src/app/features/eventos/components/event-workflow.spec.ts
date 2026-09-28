@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { of, Subject, throwError } from 'rxjs';
 import { Evento, EventosPage } from '@app/core/models/evento.model';
 import { ApiService } from '@app/core/services/api.service';
-import { EventService } from '@app/core/services/event.service';
+import { EventService, EventosResponseError } from '@app/core/services/event.service';
 import { EventosListComponent } from '../eventos-list/eventos-list.component';
 
 describe('Event workflow', () => {
@@ -132,6 +132,55 @@ describe('Event workflow', () => {
       component.loadPage(component.requestedPage);
       expect(component.page).toBe(1);
       expect(component.error).toBe('');
+    });
+  });
+
+  describe('API response validation', () => {
+    let api: jasmine.SpyObj<ApiService>;
+
+    beforeEach(() => {
+      api = jasmine.createSpyObj('ApiService', ['get']);
+      TestBed.configureTestingModule({ providers: [
+        { provide: ApiService, useValue: api },
+        { provide: ActivatedRoute, useValue: { snapshot: { queryParamMap: { get: () => null } } } },
+      ] });
+    });
+
+    for (const response of [[], null, {}, { total: 12, skip: 0, limit: 5 },
+      { items: null, total: 12, skip: 0, limit: 5 },
+      { items: [], total: '12', skip: 0, limit: 5 },
+      { items: [], total: 12, skip: 0, limit: 0 }]) {
+      it(`rejects an invalid payload without breaking the list: ${JSON.stringify(response)}`, () => {
+        api.get.and.returnValue(of(response));
+        const component = TestBed.runInInjectionContext(() => new EventosListComponent());
+        component.ngOnInit();
+        expect(component.eventos).toEqual([]);
+        expect(component.page).toBe(0);
+        expect(component.total).toBeNull();
+        expect(component.loading).toBeFalse();
+        expect(component.hasNext).toBeFalse();
+        expect(component.endReached).toBeFalse();
+        expect(component.error).toBe(new EventosResponseError().message);
+        api.get.and.returnValue(of({ items: [], total: 0, skip: 0, limit: 5 }));
+        component.loadPage(component.requestedPage);
+        expect(component.error).toBe('');
+        expect(component.total).toBe(0);
+        component.ngOnDestroy();
+      });
+    }
+
+    it('passes through the documented paginated response', () => {
+      const response: EventosPage = {
+        items: [{ evento_id: 125, fecha_evento: '2026-09-28', estatus: 'pendiente' }],
+        total: 1, skip: 0, limit: 5,
+      };
+      api.get.and.returnValue(of(response));
+      const component = TestBed.runInInjectionContext(() => new EventosListComponent());
+      component.ngOnInit();
+      expect(component.eventos).toEqual(response.items);
+      expect(component.total).toBe(1);
+      expect(component.error).toBe('');
+      component.ngOnDestroy();
     });
   });
 

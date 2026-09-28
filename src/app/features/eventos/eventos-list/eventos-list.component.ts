@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { EventService } from '@app/core/services/event.service';
+import { EventService, EventosResponseError } from '@app/core/services/event.service';
 import { Evento } from '@app/core/models/evento.model';
 import { DetectionImageComponent, mexicoTime } from '../components/detection-image.component';
 import { AirSummaryComponent } from '../components/air-summary.component';
@@ -147,7 +147,14 @@ export class EventosListComponent implements OnInit, OnDestroy {
         this.hasNext = data.skip + data.limit < data.total;
         this.endReached = !this.hasNext;
       },
-      error: () => { this.loading = false; this.error = 'No se pudieron cargar los eventos.'; },
+      error: (error: unknown) => {
+        this.loading = false;
+        this.hasNext = false;
+        this.endReached = false;
+        this.error = error instanceof EventosResponseError
+          ? error.message
+          : 'No se pudieron cargar los eventos.';
+      },
     });
   }
 }
