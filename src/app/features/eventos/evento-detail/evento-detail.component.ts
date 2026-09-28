@@ -15,7 +15,7 @@ import { mexicoTime } from '../components/detection-image.component';
     <section class="page-shell" *ngIf="evento; else loadingTpl">
       <div class="header-row">
         <div>
-          <a routerLink="/eventos" [queryParams]="{ fecha: returnDate }" class="back-link">← Volver</a>
+          <a routerLink="/eventos" [queryParams]="returnFilters" class="back-link">← Volver</a>
           <h1>Evento #{{ evento.evento_id }}</h1>
         </div>
         <span class="badge" [ngClass]="evento.estatus">{{ evento.estatus }}</span>
@@ -85,7 +85,7 @@ import { mexicoTime } from '../components/detection-image.component';
 
     <ng-template #loadingTpl>
       <section class="page-shell">
-        <a routerLink="/eventos" [queryParams]="{ fecha: returnDate }" class="back-link">← Volver</a>
+        <a routerLink="/eventos" [queryParams]="returnFilters" class="back-link">← Volver</a>
         <p role="status">{{ loadError || 'Cargando detalle del evento...' }}</p>
         <button *ngIf="loadError" (click)="ngOnInit()">Reintentar</button>
       </section>
@@ -211,7 +211,11 @@ export class EventoDetailComponent implements OnInit {
   loadError = '';
   statusError = '';
   statusMessage = '';
-  returnDate = this.route.snapshot.queryParamMap.get('fecha');
+  returnFilters = {
+    fecha: this.route.snapshot.queryParamMap.get('fecha'),
+    fecha_fin: this.route.snapshot.queryParamMap.get('fecha_fin'),
+    pagina: this.route.snapshot.queryParamMap.get('pagina'),
+  };
   saving = false;
   time = mexicoTime;
   get lastImageIndex(): number { return Math.max(0, (this.evento?.imagenes?.length ?? 0) - 1); }
