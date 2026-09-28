@@ -67,3 +67,10 @@ export interface CalidadAire {
   tipo: 'antes' | 'durante' | 'despues' | 'pendiente';
   hora_medicion?: string | null;
 }
+
+export interface EventosPage {
+  items: Evento[];
+  total: number;
+  skip: number;
+  limit: number;
+}

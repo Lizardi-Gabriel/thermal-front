@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { of, Subject, throwError } from 'rxjs';
-import { Evento } from '@app/core/models/evento.model';
+import { Evento, EventosPage } from '@app/core/models/evento.model';
 import { ApiService } from '@app/core/services/api.service';
 import { EventService } from '@app/core/services/event.service';
 import { EventosListComponent } from '../eventos-list/eventos-list.component';
@@ -23,7 +23,7 @@ describe('Event workflow', () => {
 
     beforeEach(() => {
       service = jasmine.createSpyObj('EventService', ['getEventos']);
-      service.getEventos.and.returnValue(of(events(5)));
+      service.getEventos.and.callFake(query => of({ items: events(5), total: 15, skip: query?.skip ?? 0, limit: 5 }));
       TestBed.configureTestingModule({ providers: [
         { provide: EventService, useValue: service },
         { provide: ActivatedRoute, useValue: { snapshot: { queryParamMap: { get: (key: string) => key === 'fecha' ? '2026-03-01' : null } } } },
@@ -58,27 +58,59 @@ describe('Event workflow', () => {
       expect(component.endDate).toBe('');
     });
 
-    it('stops on a partial page or an empty page after an exact multiple', () => {
+    it('disables next on an exact multiple without requesting an empty page', () => {
+      service.getEventos.and.returnValue(of({ items: events(5), total: 5, skip: 0, limit: 5 }));
       component.ngOnInit();
-      service.getEventos.and.returnValue(of([]));
-      component.loadPage(1);
-      expect(component.page).toBe(0);
       expect(component.eventos.length).toBe(5);
+      expect(component.totalPages).toBe(1);
       expect(component.hasNext).toBeFalse();
-      service.getEventos.and.returnValue(of(events(2)));
       component.loadPage(1);
-      expect(component.page).toBe(1);
+      expect(service.getEventos).toHaveBeenCalledTimes(1);
+      expect(component.page).toBe(0);
+    });
+
+    it('shows three pages for twelve events and stops on the partial last page', () => {
+      service.getEventos.and.callFake(query => of({ items: events(query?.skip === 10 ? 2 : 5), total: 12, skip: query?.skip ?? 0, limit: 5 }));
+      component.ngOnInit();
+      expect(component.total).toBe(12);
+      expect(component.totalPages).toBe(3);
+      expect(component.hasNext).toBeTrue();
+      component.loadPage(1);
+      expect(component.hasNext).toBeTrue();
+      component.loadPage(2);
       expect(component.eventos.length).toBe(2);
       expect(component.hasNext).toBeFalse();
+      component.loadPage(3);
+      expect(service.getEventos).toHaveBeenCalledTimes(3);
+    });
+
+    it('handles an empty result without allowing navigation', () => {
+      service.getEventos.and.returnValue(of({ items: [], total: 0, skip: 0, limit: 5 }));
+      component.ngOnInit();
+      expect(component.totalPages).toBe(0);
+      expect(component.eventos).toEqual([]);
+      expect(component.hasNext).toBeFalse();
+      component.loadPage(-1);
+      component.loadPage(1);
+      expect(service.getEventos).toHaveBeenCalledTimes(1);
+    });
+
+    it('returns to the last available page when a saved page no longer exists', () => {
+      service.getEventos.and.callFake(query => of({ items: query?.skip ? [] : events(2), total: 2, skip: query?.skip ?? 0, limit: 5 }));
+      component.loadPage(2);
+      expect(service.getEventos.calls.mostRecent().args[0]?.skip).toBe(0);
+      expect(component.page).toBe(0);
+      expect(component.eventos.length).toBe(2);
+      expect(component.loading).toBeFalse();
     });
 
     it('cancels stale requests when dates change', () => {
-      const oldRequest = new Subject<Evento[]>();
+      const oldRequest = new Subject<EventosPage>();
       service.getEventos.and.returnValue(oldRequest);
       component.ngOnInit();
-      service.getEventos.and.returnValue(of(events(2)));
+      service.getEventos.and.returnValue(of({ items: events(2), total: 2, skip: 0, limit: 5 }));
       component.selectDay('');
-      oldRequest.next(events(5));
+      oldRequest.next({ items: events(5), total: 15, skip: 0, limit: 5 });
       expect(component.eventos.length).toBe(2);
     });
 
@@ -96,7 +128,7 @@ describe('Event workflow', () => {
       component.loadPage(1);
       expect(component.page).toBe(0);
       expect(component.error).toBeTruthy();
-      service.getEventos.and.returnValue(of(events(2)));
+      service.getEventos.and.returnValue(of({ items: events(2), total: 7, skip: 5, limit: 5 }));
       component.loadPage(component.requestedPage);
       expect(component.page).toBe(1);
       expect(component.error).toBe('');
@@ -105,7 +137,7 @@ describe('Event workflow', () => {
 
   it('serializes all supported filters and omits empty dates', () => {
     const api = jasmine.createSpyObj('ApiService', ['get']);
-    api.get.and.returnValue(of([]));
+    api.get.and.returnValue(of({ items: [], total: 0, skip: 0, limit: 5 }));
     TestBed.configureTestingModule({ providers: [{ provide: ApiService, useValue: api }] });
     const service = TestBed.inject(EventService);
     service.getEventos({ fecha_inicio: '', fecha_fin: '' }).subscribe();

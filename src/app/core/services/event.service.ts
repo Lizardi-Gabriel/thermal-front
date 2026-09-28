@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
-import { Evento, EventoStatus } from '../models/evento.model';
+import { Evento, EventoStatus, EventosPage } from '../models/evento.model';
 import { EstadisticasEventos } from '../models/report.model';
 
 export interface EventosQuery {
@@ -23,13 +23,13 @@ export class EventService {
     return this.api.get<EstadisticasEventos>('/eventosfront/estadisticas');
   }
 
-  getEventos(query: EventosQuery = {}): Observable<Evento[]> {
+  getEventos(query: EventosQuery = {}): Observable<EventosPage> {
     const params: Record<string, string | number> = { skip: query.skip ?? 0, limit: query.limit ?? 5 };
     for (const key of ['fecha_inicio', 'fecha_fin', 'estatus', 'usuario_id'] as const) {
       const value = query[key];
       if (value !== undefined && value !== '') params[key] = value;
     }
-    return this.api.get<Evento[]>('/eventosfront/optimizado', { params });
+    return this.api.get<EventosPage>('/eventosfront/optimizado', { params });
   }
 
   getEventoById(id: number): Observable<Evento> {

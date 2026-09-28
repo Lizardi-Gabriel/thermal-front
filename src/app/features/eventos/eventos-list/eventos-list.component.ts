@@ -29,7 +29,7 @@ import { AirSummaryComponent } from '../components/air-summary.component';
       <p *ngIf="loading" role="status">Cargando eventos…</p>
       <p *ngIf="error" role="alert">{{ error }} <button (click)="loadPage(requestedPage)">Reintentar</button></p>
       <ng-container *ngIf="!loading && !error">
-        <h2 aria-live="polite">Eventos <span class="muted">({{ eventos.length }} en esta página)</span></h2>
+        <h2 aria-live="polite">Eventos <span class="muted">({{ eventos.length }} de {{ total }})</span></h2>
         <div class="grid">
           <a class="card" *ngFor="let evento of eventos" [routerLink]="['/eventos', evento.evento_id]" [queryParams]="{ fecha: selectedDate, fecha_fin: endDate, pagina: page }" [attr.aria-label]="'Ver evento ' + evento.evento_id">
             <div class="preview">
@@ -51,7 +51,7 @@ import { AirSummaryComponent } from '../components/air-summary.component';
       </ng-container>
       <nav class="pagination" aria-label="Paginación de eventos">
         <button type="button" (click)="loadPage(page - 1)" [disabled]="loading || page === 0 || invalidDates">Anterior</button>
-        <span aria-live="polite">Página {{ page + 1 }} · 5 eventos por página</span>
+        <span aria-live="polite"><ng-container *ngIf="total !== null">{{ total ? 'Página ' + (page + 1) + ' de ' + totalPages : 'Sin resultados' }} · </ng-container>5 eventos por página</span>
         <button type="button" (click)="loadPage(page + 1)" [disabled]="loading || !hasNext || !!error || invalidDates">Siguiente</button>
       </nav>
       <p *ngIf="endReached && !loading && !error" role="status">No hay más eventos.</p>
@@ -77,9 +77,12 @@ export class EventosListComponent implements OnInit, OnDestroy {
   eventos: Evento[] = [];
   loading = false;
   error = '';
+  total: number | null = null;
   hasNext = false;
   endReached = false;
   private request?: Subscription;
+
+  get totalPages(): number { return Math.ceil((this.total ?? 0) / this.pageSize); }
 
   get invalidDates(): boolean {
     return !!(this.selectedDate && this.endDate && this.selectedDate > this.endDate);
@@ -90,6 +93,7 @@ export class EventosListComponent implements OnInit, OnDestroy {
     this.page = 0;
     this.eventos = [];
     this.hasNext = false;
+    this.total = null;
     this.loadPage(0);
   }
 
@@ -112,6 +116,7 @@ export class EventosListComponent implements OnInit, OnDestroy {
 
   loadPage(page: number): void {
     if (page < 0 || !Number.isSafeInteger(page)) return;
+    if (this.total !== null && page >= Math.max(1, this.totalPages)) return;
     this.request?.unsubscribe();
     this.requestedPage = page;
     this.error = '';
@@ -129,13 +134,18 @@ export class EventosListComponent implements OnInit, OnDestroy {
       fecha_fin: this.endDate,
     }).subscribe({
       next: data => {
+        this.total = data.total;
+        const lastPage = Math.max(0, this.totalPages - 1);
+        // A saved page may no longer exist if events changed since the last visit.
+        if (page > lastPage) {
+          this.loadPage(lastPage);
+          return;
+        }
         this.loading = false;
-        this.hasNext = data.length === this.pageSize;
+        this.eventos = data.items;
+        this.page = Math.floor(data.skip / data.limit);
+        this.hasNext = data.skip + data.limit < data.total;
         this.endReached = !this.hasNext;
-        // An exact multiple of five is only known to be the end after an empty request.
-        if (!data.length && page > this.page && this.eventos.length) return;
-        this.eventos = data;
-        this.page = page;
       },
       error: () => { this.loading = false; this.error = 'No se pudieron cargar los eventos.'; },
     });
